@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>InfoVis UE 2024</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+
+    <body>
+        <div class ='title_div'>
+            <h1>InfoVis UE 2024 - Exercise 2</h1>
+            <p>Alina Jaud (MATNR), Jakob Kohlhas (12208214)</p>
+        </div>
+
+        <div id="main_container" class="main_container">
+
+            <!-- Task 4: 'Render a heatmap showing the indicator values for the individual players/teams. Take special care about the readability of the text labels and an appropriate color map (up to 5 points).' -->
+            <div class="container">
+                <h2>Heatmap: Indicators by Team</h2>
+                <br>
+                <p class="heatmap_tooltip tooltip" id="heatmap_tooltip"></p>
+                <svg id="heatmap"></svg>
+            </div>
+
+            <!-- Task 3: 'Use PCA result as a 2D scatterplot, where individual dots represent the teams or players. The association of the individual dots with the teams or players has to be clear. (up to 5 points).' -->
+            <div class="container">
+                <h2>Scatterplot: Aggregated Teams PCA (PC1, PC2)</h2>
+                <br>
+                <p class="scatterplot_tooltip tooltip" id="scatterplot_tooltip"></p>
+                <svg id="scatterplot"></svg>
+            </div>
+
+        </div>
+
+        <script>
+            // Pass data from Flask/jinja2 to JavaScript
+            var rawData = '{{ data | safe }}';
+            const data = JSON.parse(rawData);
+        </script>
+        <script src="{{url_for('static', filename='js/scatterplot.js')}}"></script>
+        <script src="{{url_for('static', filename='js/heatmap.js')}}"></script>
+
+    </body>
+
+</html>

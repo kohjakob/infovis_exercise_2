@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .attr("class", d => `heatmap-cell ${d['Team Name'].replace(/\s+/g, '-')}`)
         .style("fill", d => {
             const colorScale = d3.scaleSequential()
-                                .interpolator(d3.interpolateInferno)
+                                .interpolator(d3.interpolateOranges)
                                 .domain([keyMinMax[d.metric].min, keyMinMax[d.metric].max]);
             return colorScale(d.value);
         })
@@ -78,8 +78,8 @@ document.addEventListener("DOMContentLoaded", function() {
             // Highlight team with outline and fill with heatmap color
             d3.selectAll(`.team-dot.${d['Team Name'].replace(/\s+/g, '-')}`)
                 .style("r", 10)
-                .style("fill", f => { 
-                    const colorScale = d3.scaleSequential().interpolator(d3.interpolateInferno).domain([keyMinMax[d.metric].min, keyMinMax[d.metric].max]);
+                .style("fill", f => {
+                    const colorScale = d3.scaleSequential().interpolator(d3.interpolateOranges).domain([keyMinMax[d.metric].min, keyMinMax[d.metric].max]);
                     return colorScale(d.value)
                 });
             // Show info box
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
               .style("fill", 'grey');
             // Hide info box
             infoBox.style("display", "none");
-              
+
         });
 
         // Task 5.2: 'By hovering over a team/player label or a cell in the heatmap, highlight the corresponding dot in the scatterplot (up to 5 points). '
@@ -115,9 +115,9 @@ document.addEventListener("DOMContentLoaded", function() {
             const isMetric = keys.includes(key);
             if (isMetric) {
                 const colorScale = d3.scaleSequential()
-                                     .interpolator(d3.interpolateInferno)
+                                     .interpolator(d3.interpolateOranges)
                                      .domain([keyMinMax[key].min, keyMinMax[key].max]);
- 
+
                 data.pca.forEach(d => {
                     if (d['Team Name'] === 'retired') {
                         return;

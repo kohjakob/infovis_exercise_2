@@ -1,47 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>InfoVis UE 2024</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div id="main_container" class="main_container">
 
-    <head>
-        <meta charset="UTF-8">
-        <title>InfoVis UE 2024</title>
-        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
-        <script src="https://d3js.org/d3.v7.min.js"></script>
-    </head>
-
-    <body>
-        <div class ='title_div'>
-            <h1>InfoVis UE 2024 - Exercise 2</h1>
+        <div class="title_div">
+            <h1>InfoVis UE 2024</h1>
             <p>Alina Jaud (MATNR), Jakob Kohlhas (12208214)</p>
         </div>
 
-        <div id="main_container" class="main_container">
-
-            <!-- Task 4: 'Render a heatmap showing the indicator values for the individual players/teams. Take special care about the readability of the text labels and an appropriate color map (up to 5 points).' -->
-            <div class="container">
-                <h2>Heatmap: Indicators by Team</h2>
-                <br>
-                <p class="heatmap_tooltip tooltip" id="heatmap_tooltip"></p>
-                <svg id="heatmap"></svg>
-            </div>
-
-            <!-- Task 3: 'Use PCA result as a 2D scatterplot, where individual dots represent the teams or players. The association of the individual dots with the teams or players has to be clear. (up to 5 points).' -->
-            <div class="container">
-                <h2>Scatterplot: Aggregated Teams PCA (PC1, PC2)</h2>
-                <br>
-                <p class="scatterplot_tooltip tooltip" id="scatterplot_tooltip"></p>
-                <svg id="scatterplot"></svg>
-            </div>
-
+        <!-- Heatmap -->
+        <div class="container">
+            <h2>Heatmap: Indicators by Team</h2>
+            <br>
+            <!-- Bonus task: 'On hovering over a cell in the heatmap show a tooltip  (e.g., a tooltip showing the corresponding team/player name and indicator value) (up to 5 extra points). ' -->
+            <p class="heatmap_tooltip tooltip" id="heatmap_tooltip"></p>
+            <svg id="heatmap"></svg>
         </div>
 
-        <script>
-            // Pass data from Flask/jinja2 to JavaScript
-            var rawData = '{{ data | safe }}';
-            const data = JSON.parse(rawData);
-        </script>
-        <script src="{{url_for('static', filename='js/scatterplot.js')}}"></script>
-        <script src="{{url_for('static', filename='js/heatmap.js')}}"></script>
+        <!-- Scatterplot -->
+        <div class="container">
+            <h2>Scatterplot: Aggregated Teams PCA (PC1, PC2)</h2>
+            <br>
+            <p class="scatterplot_tooltip tooltip" id="scatterplot_tooltip"></p>
+            <svg id="scatterplot"></svg>
+        </div>
 
-    </body>
+        <!-- Timeseries Plot -->
+        <div class="container">
+            <h2>Timeseries: Feature Variability</h2>
+            <br>
+            <select id="featureSelect"></select>
+            <br><br>
+            <svg id="timeseries"></svg>
+        </div>
 
+        <!-- Bonus task: 'On hovering over a team/player on the heatmap or scatterplot, show detailed info box of a selected number of performance stat. ' -->
+        <!-- Stats-on-hover box -->
+        <div class="container">
+            <h2>Stats-on-Hover</h2>
+            <br>
+            <div class="info_box_wrapper">
+                <div id="info_box" class="info_box" style="display:none;">
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Pass data from Flask/jinja2 to JavaScript
+        var rawData = '{{ data | safe }}';
+        const data = JSON.parse(rawData);
+    </script>
+    <script src="{{url_for('static', filename='js/scatterplot.js')}}"></script>
+    <script src="{{url_for('static', filename='js/heatmap.js')}}"></script>
+    <script src="{{url_for('static', filename='js/timeseries.js')}}"></script>
+</body>
 </html>

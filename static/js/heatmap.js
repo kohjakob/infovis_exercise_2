@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const uniqueTeams = Array.from(new Set(teams));
 
     const margin = {top: 0, right: 20, bottom: 125, left: 170},
-          width = Math.max(800, uniqueTeams.length * 15),
+          width = Math.max(700, uniqueTeams.length * 15),
           height = 700 - margin.top - margin.bottom;
 
     const svg = d3.select("#heatmap")
@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }, {});
 
     const tooltip = d3.select("#heatmap_tooltip");
+    const infoBox = d3.select("#info_box");
 
     svg.selectAll("rect")
        .data(heatmapData.flatMap(d => keys.map(key => ({ 'Team Name': d['Team Name'], 'metric': key, 'value': d[key] }))))
@@ -81,6 +82,20 @@ document.addEventListener("DOMContentLoaded", function() {
                     const colorScale = d3.scaleSequential().interpolator(d3.interpolateInferno).domain([keyMinMax[d.metric].min, keyMinMax[d.metric].max]);
                     return colorScale(d.value)
                 });
+            // Show info box
+            const teamData = heatmapData.find(team => team['Team Name'] === d['Team Name']);
+            if (teamData) {
+                let infoHtml = `<strong>${teamData['Team Name']}</strong><br>`;
+                Object.keys(teamData).forEach(key => {
+                    if (key !== 'Team Name' && !key.includes('Unnamed')) {
+                        infoHtml += `${key}: ${teamData[key]}<br>`;
+                    }
+                });
+                infoBox.html(infoHtml)
+                       .style("left", `${event.pageX + 20}px`)
+                       .style("top", `${event.pageY + 20}px`)
+                       .style("display", "block");
+            }
         })
         .on("mouseout", function(event, d) {
             tooltip.style("opacity", 0)
@@ -88,9 +103,13 @@ document.addEventListener("DOMContentLoaded", function() {
             d3.selectAll(`.team-dot.${d['Team Name'].replace(/\s+/g, '-')}`)
               .style("r", 5)
               .style("fill", 'grey');
+            // Hide info box
+            infoBox.style("display", "none");
               
         });
 
+        // Task 5.2: 'By hovering over a team/player label or a cell in the heatmap, highlight the corresponding dot in the scatterplot (up to 5 points). '
+        // Task 5.3: 'By hovering over an indicator label or a cell in the heatmap, color the dots in the scatterplot according to the team's/player's associated indicator value (up to 5 points)'
         svg.selectAll(".tick")
         .on("mouseover", function(event, key) {
             const isMetric = keys.includes(key);
@@ -116,6 +135,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 d3.selectAll(`.heatmap-cell.${key.replace(/\s+/g, '-')}`)
                     .style("stroke", "black")
                     .style("stroke-width", 2);
+                // Show info box
+                const teamData = heatmapData.find(team => team['Team Name'] === key);
+                if (teamData) {
+                    let infoHtml = `<strong>${teamData['Team Name']}</strong><br>`;
+                    Object.keys(teamData).forEach(key => {
+                        if (key !== 'Team Name' && !key.includes('Unnamed')) {
+                            infoHtml += `${key}: ${teamData[key]}<br>`;
+                        }
+                    });
+                    infoBox.html(infoHtml)
+                           .style("display", "block");
+                }
             }
         })
         .on("mouseout", function(event, key) {
@@ -129,7 +160,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     .style("r", 5);
                 d3.selectAll(`.heatmap-cell.${key.replace(/\s+/g, '-')}`)
                     .style("stroke", 'none');
+                // Hide info box
+                infoBox.style("display", "none");
             }
         });
- 
 });
